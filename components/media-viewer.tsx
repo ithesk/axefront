@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Play, Volume2, FileText, Pause, Download } from 'lucide-react';
+import { Play, FileText, Pause, Download } from 'lucide-react';
 import { Button } from './ui/button';
 import { getFileUrl, verificarArchivo } from '../lib/pocketbase';
 

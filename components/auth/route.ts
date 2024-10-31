@@ -3,7 +3,7 @@ import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import PocketBase from 'pocketbase'
 
-// Extender los tipos de usuario y sesión
+// Extender los tipos de usuario
 interface User {
   id: string;
   email: string;
