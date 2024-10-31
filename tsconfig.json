@@ -17,8 +17,10 @@
         "name": "next"
       }
     ],
+    "baseUrl": "./", // Agregar baseUrl
     "paths": {
-      "@/*": ["./*"]
+      "lib/*": ["lib/*"], // Agregar alias para lib
+      "*": ["./*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

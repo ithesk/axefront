@@ -3,6 +3,19 @@ import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import PocketBase from 'pocketbase'
 
+// Extender los tipos de usuario y sesión
+interface User {
+  id: string;
+  email: string;
+  name: string;
+  token: string; // Agregar token
+}
+
+interface Session {
+  user: User;
+  accessToken: string; // Agregar accessToken
+}
+
 const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE_URL)
 
 const handler = NextAuth({
@@ -34,8 +47,12 @@ const handler = NextAuth({
             name: authData.record.name,
             token: authData.token // Guardamos el token para usarlo después
           }
-        } catch (error: any) {
-          throw new Error(error.message || 'Error al iniciar sesión')
+        } catch (error: unknown) {
+          if (error instanceof Error) {
+            throw new Error(error.message || 'Error al iniciar sesión')
+          } else {
+            throw new Error('Error desconocido al iniciar sesión')
+          }
         }
       }
     })

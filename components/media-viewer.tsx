@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Play, Volume2, FileText, Pause, Download } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { getFileUrl, verificarArchivo } from '@/lib/pocketbase';
+import { Button } from './ui/button';
+import { getFileUrl, verificarArchivo } from '../lib/pocketbase';
 
 interface MediaViewerProps {
   collectionId: string;
@@ -93,9 +93,9 @@ export function MediaViewer({ collectionId, recordId, fileName, tipo, onError }:
             }
           }
         }
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error('Error al inicializar media:', error);
-        const mensaje = `Error: ${error.message || 'Error desconocido'}`;
+        const mensaje = `Error: ${error instanceof Error ? error.message : 'Error desconocido'}`;
         setError(mensaje);
         onError?.(mensaje);
       }

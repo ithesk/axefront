@@ -11,24 +11,24 @@ import {
   FileText,
   Mic
 } from 'lucide-react'
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
+import { Input } from './ui/input'
+import { Button } from './ui/button'
 import {
   Card,
   CardContent,
   CardHeader,
-} from "@/components/ui/card"
+} from './ui/card'
 import { 
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { obtenerConversaciones, obtenerMensajesConversacion } from '@/lib/conversation-service'
-import type { ConversacionPB, MensajePB } from '@/types/conversations'
+} from './ui/tooltip'
+import { Badge } from './ui/badge'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs'
+import { ScrollArea } from './ui/scroll-area'
+import { obtenerConversaciones, obtenerMensajesConversacion } from '../lib/conversation-service'
+import type { ConversacionPB, MensajePB } from '../types/conversations'
 import { MediaViewer } from './media-viewer'
 
 // Helper para formatear fechas
@@ -175,7 +175,6 @@ export default function ChatViewer() {
   const [error, setError] = useState<string | null>(null)
   const [tabActual, setTabActual] = useState('todos')
   const timeoutRef = useRef<NodeJS.Timeout>()
-  const viewportRef = useRef<HTMLDivElement>(null)
 
   // Función para cargar las conversaciones
   const cargarDatos = useCallback(async () => {
