@@ -1,4 +1,3 @@
-// app/api/auth/[...nextauth]/route.ts
 import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import PocketBase from 'pocketbase'
@@ -61,22 +60,22 @@ const handler = NextAuth({
     // Añadimos el token a la sesión JWT
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id
-        token.email = user.email
-        token.name = user.name
-        token.accessToken = user.token
+        token.id = (user as User).id; // Asegurarse de que user es del tipo User
+        token.email = (user as User).email;
+        token.name = (user as User).name;
+        token.accessToken = (user as User).token;
       }
-      return token
+      return token;
     },
     // Añadimos los datos del usuario a la sesión
     async session({ session, token }) {
       if (session.user) {
-        session.user.id = token.id as string
-        session.user.email = token.email as string
-        session.user.name = token.name as string
-        session.accessToken = token.accessToken as string
+        session.user.id = token.id as string;
+        session.user.email = token.email as string;
+        session.user.name = token.name as string;
+        session.accessToken = token.accessToken as string;
       }
-      return session
+      return session;
     }
   },
   pages: {
