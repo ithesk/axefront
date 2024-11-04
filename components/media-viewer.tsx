@@ -8,6 +8,7 @@ interface MediaViewerProps {
   recordId: string;
   fileName: string;
   tipo: 'audio' | 'imagen' | 'documento';
+  message?: string; // Nuevo prop para recibir el mensaje con la transcripción
   onError?: (error: string) => void;
 }
 
@@ -15,7 +16,16 @@ const isMobileDevice = () => {
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 };
 
-export function MediaViewer({ collectionId, recordId, fileName, tipo, onError }: MediaViewerProps) {
+// Función auxiliar para extraer la transcripción del mensaje
+const extractTranscription = (message?: string) => {
+  console.log('Extrayendo transcripción:', message);
+  if (!message) return null;
+  const match = message.match(/Nota de voz - Transcripción: (.+)/);
+  console.log('Coincidencia encontrada:', match);
+  return match ? match[1] : null;
+};
+
+export function MediaViewer({ collectionId, recordId, fileName, tipo, message, onError }: MediaViewerProps) {
   const [url, setUrl] = useState<string>('');
   const [isPlaying, setIsPlaying] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -56,6 +66,7 @@ export function MediaViewer({ collectionId, recordId, fileName, tipo, onError }:
           try {
             setIsLoading(true);
             const response = await fetch(mediaUrl);
+            
             if (!response.ok) throw new Error('No se pudo descargar el audio');
 
             const arrayBuffer = await response.arrayBuffer();
@@ -250,9 +261,11 @@ export function MediaViewer({ collectionId, recordId, fileName, tipo, onError }:
   }
 
   if (tipo === 'audio') {
+    const transcription = extractTranscription(message);
+
     if (isMobile && playbackFailed) {
       return (
-        <div className="space-y-2">
+        <div className="space-y-3">
           <div className="flex items-center gap-4 p-4 rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 shadow-lg hover:shadow-xl transition-all duration-300">
             <div className="flex-1 text-sm text-muted-foreground">
               La reproducción no está disponible. Por favor, descarga el audio para escucharlo.
@@ -267,12 +280,23 @@ export function MediaViewer({ collectionId, recordId, fileName, tipo, onError }:
               <Download className="w-4 h-4 text-primary" />
             </Button>
           </div>
+          {transcription && (
+            <div className="p-4 rounded-lg bg-muted/30 space-y-2">
+              <div className="flex items-center gap-2">
+                <FileText className="w-4 h-4 text-primary/70" />
+                <p className="font-medium text-primary/70">Transcripción</p>
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                {transcription}
+              </p>
+            </div>
+          )}
         </div>
       );
     }
 
     return (
-      <div className="space-y-2">
+      <div className="space-y-3">
         <div className="flex items-center gap-4 p-4 rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 shadow-lg hover:shadow-xl transition-all duration-300">
           <Button
             size="icon"
@@ -318,9 +342,22 @@ export function MediaViewer({ collectionId, recordId, fileName, tipo, onError }:
             <Download className="w-4 h-4 text-primary" />
           </Button>
         </div>
+        
+        {transcription && (
+          <div className="p-4 rounded-lg bg-muted/30 space-y-2">
+            <div className="flex items-center gap-2">
+              <FileText className="w-4 h-4 text-primary/70" />
+              <p className="font-medium text-primary/70">Transcripción</p>
+            </div>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              {transcription}
+            </p>
+          </div>
+        )}
       </div>
     );
   }
+  
 
   if (tipo === 'imagen') {
     return (

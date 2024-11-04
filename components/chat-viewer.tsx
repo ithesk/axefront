@@ -309,6 +309,7 @@ const filtrarMensajes = useCallback((mensajes: MensajePB[] = [], tipo?: string) 
           recordId={mensaje.id}
           fileName={mensaje.media}
           tipo="audio"
+          message={mensaje.message} // Pasamos el mensaje completo para su uso en el componente MediaViewer 
           onError={(error) => console.error('Error en nota de voz:', error)}
         />
       )
